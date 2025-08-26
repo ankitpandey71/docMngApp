@@ -140,6 +140,7 @@ const SearchDocuments = () => {
                 </tr>
               </thead>
               <tbody>
+                {console.log(documents,"doccc")}
                 {documents.map((doc) => (
                   <tr key={doc.id}>
                     <td className="p-2 border">{doc.document_date}</td>
@@ -149,7 +150,7 @@ const SearchDocuments = () => {
                     <td className="p-2 border">
                       <button
                         className="bg-blue-500 text-white px-2 py-1 rounded"
-                        onClick={() => navigate(`/preview/${doc.id}`)}
+                        onClick={() => navigate(`/preview/${doc.document_id}`)}
                       >
                         Preview
                       </button>
