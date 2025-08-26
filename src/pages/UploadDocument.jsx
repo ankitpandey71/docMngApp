@@ -18,7 +18,7 @@ const UploadDocument = () => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    // Fetch tags from API
+   
     axios
       .post(
         "https://apis.allsoft.co/api/documentManagement/documentTags",
@@ -35,7 +35,6 @@ const UploadDocument = () => {
       setTags([...tags, { tag_name: tag }]);
       if (!allTags.find((t) => t.tag_name === tag)) {
         setAllTags([...allTags, { tag_name: tag }]);
-        // Optionally send new tag to API here
       }
     }
     setTagInput("");
@@ -62,7 +61,7 @@ const UploadDocument = () => {
         document_date: date,
         document_remarks: remarks,
         tags,
-        user_id: "user", // replace with actual user id if available
+        user_id: "user",
       })
     );
 

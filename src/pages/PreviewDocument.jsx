@@ -10,11 +10,11 @@ const PreviewDocument = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // You should replace this with actual document detail API if available
+    
     axios
       .post(
         "https://apis.allsoft.co/api/documentManagement/searchDocumentEntry",
-        { search: { value: id } }, // assuming id is searchable
+        { search: { value: id } }, 
         { headers: { token } }
       )
       .then((res) => {
