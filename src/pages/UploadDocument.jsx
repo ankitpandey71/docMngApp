@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const names = ["John", "Tom", "Emily"];
 const departments = ["Accounts", "HR", "IT", "Finance"];
@@ -16,9 +17,9 @@ const UploadDocument = () => {
   const [remarks, setRemarks] = useState("");
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-   
     axios
       .post(
         "https://apis.allsoft.co/api/documentManagement/documentTags",
@@ -83,116 +84,128 @@ const UploadDocument = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <form
-        className="bg-white p-8 rounded shadow w-full max-w-lg space-y-4"
-        onSubmit={handleUpload}
-      >
-        <h2 className="text-xl font-bold mb-2">Upload Document</h2>
-        <div>
-          <label className="block mb-1">Date</label>
-          <input
-            type="date"
-            className="w-full border p-2 rounded"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Category</label>
-          <select
-            className="w-full border p-2 rounded"
-            value={majorHead}
-            onChange={(e) => {
-              setMajorHead(e.target.value);
-              setMinorHead("");
-            }}
-          >
-            <option value="Personal">Personal</option>
-            <option value="Professional">Professional</option>
-          </select>
-        </div>
-        <div>
-          <label className="block mb-1">{majorHead === "Personal" ? "Name" : "Department"}</label>
-          <select
-            className="w-full border p-2 rounded"
-            value={minorHead}
-            onChange={(e) => setMinorHead(e.target.value)}
-            required
-          >
-            <option value="">Select</option>
-            {(majorHead === "Personal" ? names : departments).map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="block mb-1">Tags</label>
-          <div className="flex flex-wrap gap-2 mb-2">
-            {tags.map((tag) => (
-              <span
-                key={tag.tag_name}
-                className="bg-blue-100 px-2 py-1 rounded-full flex items-center"
-              >
-                {tag.tag_name}
-                <button
-                  type="button"
-                  onClick={() => setTags(tags.filter((t) => t.tag_name !== tag.tag_name))}
-                  className="ml-2 text-red-500"
-                >
-                  ×
-                </button>
-              </span>
-            ))}
+    <div>
+      <div className="bg-white fixed shadow p-4 flex items-center">
+        <button onClick={() => navigate(-1)}>Go Back</button>
+      </div>
+
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <form
+          className="bg-white p-8 rounded shadow w-full max-w-lg space-y-4"
+          onSubmit={handleUpload}
+        >
+          <h2 className="text-xl font-bold mb-2">Upload Document</h2>
+          <div>
+            <label className="block mb-1">Date</label>
+            <input
+              type="date"
+              className="w-full border p-2 rounded"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              required
+            />
           </div>
-          <input
-            type="text"
-            className="border p-2 rounded w-2/3 mr-2"
-            placeholder="Add tag"
-            value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
-            list="tags-list"
-          />
-          <datalist id="tags-list">
-            {allTags.map((tag) => (
-              <option key={tag.tag_name} value={tag.tag_name} />
-            ))}
-          </datalist>
-          <button
-            type="button"
-            className="bg-blue-500 text-white px-2 py-1 rounded"
-            onClick={() => tagInput && handleTagAdd(tagInput)}
-          >
-            Add
+          <div>
+            <label className="block mb-1">Category</label>
+            <select
+              className="w-full border p-2 rounded"
+              value={majorHead}
+              onChange={(e) => {
+                setMajorHead(e.target.value);
+                setMinorHead("");
+              }}
+            >
+              <option value="Personal">Personal</option>
+              <option value="Professional">Professional</option>
+            </select>
+          </div>
+          <div>
+            <label className="block mb-1">
+              {majorHead === "Personal" ? "Name" : "Department"}
+            </label>
+            <select
+              className="w-full border p-2 rounded"
+              value={minorHead}
+              onChange={(e) => setMinorHead(e.target.value)}
+              required
+            >
+              <option value="">Select</option>
+              {(majorHead === "Personal" ? names : departments).map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block mb-1">Tags</label>
+            <div className="flex flex-wrap gap-2 mb-2">
+              {tags.map((tag) => (
+                <span
+                  key={tag.tag_name}
+                  className="bg-blue-100 px-2 py-1 rounded-full flex items-center"
+                >
+                  {tag.tag_name}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setTags(tags.filter((t) => t.tag_name !== tag.tag_name))
+                    }
+                    className="ml-2 text-red-500"
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
+            <input
+              type="text"
+              className="border p-2 rounded w-2/3 mr-2"
+              placeholder="Add tag"
+              value={tagInput}
+              onChange={(e) => setTagInput(e.target.value)}
+              list="tags-list"
+            />
+            <datalist id="tags-list">
+              {allTags.map((tag) => (
+                <option key={tag.tag_name} value={tag.tag_name} />
+              ))}
+            </datalist>
+            <button
+              type="button"
+              className="bg-blue-500 text-white px-2 py-1 rounded"
+              onClick={() => tagInput && handleTagAdd(tagInput)}
+            >
+              Add
+            </button>
+          </div>
+          <div>
+            <label className="block mb-1">Remarks</label>
+            <input
+              type="text"
+              className="w-full border p-2 rounded"
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block mb-1">File (Image/PDF)</label>
+            <input
+              type="file"
+              className="w-full border p-2 rounded"
+              accept="image/png, image/jpeg, application/pdf"
+              onChange={(e) => setFile(e.target.files[0])}
+              required
+            />
+          </div>
+          <button className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+            Upload
           </button>
-        </div>
-        <div>
-          <label className="block mb-1">Remarks</label>
-          <input
-            type="text"
-            className="w-full border p-2 rounded"
-            value={remarks}
-            onChange={(e) => setRemarks(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="block mb-1">File (Image/PDF)</label>
-          <input
-            type="file"
-            className="w-full border p-2 rounded"
-            accept="image/png, image/jpeg, application/pdf"
-            onChange={(e) => setFile(e.target.files[0])}
-            required
-          />
-        </div>
-        <button className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
-          Upload
-        </button>
-        {message && <div className="text-center text-green-600 mt-2">{message}</div>}
-      </form>
+          {message && (
+            <div className="text-center text-green-600 mt-2">{message}</div>
+          )}
+        </form>
+      </div>
     </div>
   );
 };
